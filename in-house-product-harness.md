@@ -40,12 +40,12 @@
 - 大阪大学
 - `gdgs.jp` のアプリ群（20以上）を、ほぼ1人で作っている
 
-画像: アイコン
-![gdgs.jp のアプリランチャー](images/product-harness/04-app-launcher.png)
+![ゆにねこのアイコン](images/product-harness/02-avatar.png)
+![DevFest Kansai の集合写真](images/product-harness/02-devfest-kansai.jpg)
 
 > 🗣 ゆにねこです。
 > GDG Greater Kwansai のオーガナイザーと AIAU のスタッフをしていて、大阪大学に在籍しています。
-> コミュニティ運営のかたわら、今日お話しする `gdgs.jp` の20以上のアプリ群を、ほぼ1人で作って運用しています。
+> 先日も関西で大規模なカンファレンス DevFest Kansai を開催したのですが、そうしたコミュニティ運営のかたわら、今日お話しする `gdgs.jp` の20以上のアプリ群を、ほぼ1人で作って運用しています。
 
 ---
 
@@ -122,6 +122,7 @@ AI に「アプリを作って」と丸投げしているからではない。
 | **2026-10** | **③ 高速CI・Skills** も揃い、`mc` と `screen` をそれぞれ2〜3時間で本番投入 |
 
 ![アプリと基盤の年表](images/product-harness/04-timeline.png)
+![gdgs.jp のアプリランチャー](images/product-harness/04-app-launcher.png)
 ![最初に作った wiki](images/product-harness/04-wiki-home.jpg)
 
 > 🗣 具体的な中に入る前に、全体の時系列だけ共有します。
