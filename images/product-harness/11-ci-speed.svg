@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="Google Sans, Noto Sans JP, Hiragino Sans, sans-serif">
+  <rect width="1920" height="1080" fill="#F8F8F8"/>
+  <text x="120" y="150" font-size="64" font-weight="700" fill="#1E1E1E">pre-commit CI の実行時間</text>
+  <text x="120" y="420" font-size="44" font-weight="700" fill="#1E1E1E">チューニング前</text>
+  <rect x="520" y="355" width="1280" height="100" rx="50" fill="#EA4335" stroke="#1E1E1E" stroke-width="4"/>
+  <text x="1160" y="422" font-size="52" font-weight="700" text-anchor="middle" fill="#FFFFFF">3〜30 分</text>
+  <text x="120" y="640" font-size="44" font-weight="700" fill="#1E1E1E">チューニング後</text>
+  <rect x="520" y="575" width="160" height="100" rx="50" fill="#34A853" stroke="#1E1E1E" stroke-width="4"/>
+  <text x="720" y="642" font-size="52" font-weight="700" fill="#34A853">1 秒〜1 分</text>
+  <g font-size="30" fill="#1E1E1E">
+    <text x="120" y="820">・型検査とビルドを1つの Turbo グラフに　・E2E を並列化し、ビルド済み Worker を再利用</text>
+    <text x="120" y="880">・Vite 8 とネイティブ TypeScript 7　・staged なファイルから実行するチェックを選ぶ</text>
+  </g>
+</svg>

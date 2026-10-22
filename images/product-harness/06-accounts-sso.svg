@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="Google Sans, Noto Sans JP, Hiragino Sans, sans-serif">
+  <rect width="1920" height="1080" fill="#F8F8F8"/>
+  <text x="120" y="150" font-size="64" font-weight="700" fill="#1E1E1E">1つの IdP に、すべてのアプリがつながる</text>
+  <rect x="160" y="250" width="160" height="110" rx="28" fill="#FFFFFF" stroke="#1E1E1E" stroke-width="4"/>
+  <text x="240" y="318" font-size="32" font-weight="700" text-anchor="middle" fill="#1E1E1E">Google</text>
+  <line x1="320" y1="305" x2="560" y2="305" stroke="#1E1E1E" stroke-width="4" marker-end="url(#a)"/>
+  <text x="440" y="285" font-size="24" text-anchor="middle" fill="#606060">OIDC</text>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1E1E1E"/></marker></defs>
+  <rect x="570" y="210" width="780" height="200" rx="40" fill="#4285F4" stroke="#1E1E1E" stroke-width="5"/>
+  <text x="960" y="290" font-size="44" font-weight="700" text-anchor="middle" fill="#FFFFFF">accounts.gdgs.jp</text>
+  <text x="960" y="340" font-size="28" text-anchor="middle" fill="#FFFFFF">OAuth 2.1 / OIDC IdP（D1 と KV）</text>
+  <text x="960" y="380" font-size="26" text-anchor="middle" fill="#FFFFFF">チャプターとメンバーシップを一元管理</text>
+  <g stroke="#1E1E1E" stroke-width="4">
+    <line x1="960" y1="410" x2="960" y2="520"/>
+    <line x1="270" y1="520" x2="1650" y2="520"/>
+  </g>
+  <text x="990" y="480" font-size="24" fill="#606060">OIDC ＋ Service Binding（Worker 間通信）</text>
+  <g font-size="30" font-weight="700" text-anchor="middle" fill="#1E1E1E">
+    <g transform="translate(270,0)"><line x1="0" y1="520" x2="0" y2="590" stroke="#1E1E1E" stroke-width="4"/><rect x="-110" y="590" width="220" height="90" rx="24" fill="#FFFFFF" stroke="#1E1E1E" stroke-width="4"/><text y="647">tinyurl</text></g>
+    <g transform="translate(500,0)"><line x1="0" y1="520" x2="0" y2="590" stroke="#1E1E1E" stroke-width="4"/><rect x="-110" y="590" width="220" height="90" rx="24" fill="#FFFFFF" stroke="#1E1E1E" stroke-width="4"/><text y="647">wiki</text></g>
+    <g transform="translate(730,0)"><line x1="0" y1="520" x2="0" y2="590" stroke="#1E1E1E" stroke-width="4"/><rect x="-110" y="590" width="220" height="90" rx="24" fill="#FFFFFF" stroke="#1E1E1E" stroke-width="4"/><text y="647">img</text></g>
+    <g transform="translate(960,0)"><line x1="0" y1="520" x2="0" y2="590" stroke="#1E1E1E" stroke-width="4"/><rect x="-110" y="590" width="220" height="90" rx="24" fill="#FFFFFF" stroke="#1E1E1E" stroke-width="4"/><text y="647">scheduler</text></g>
+    <g transform="translate(1190,0)"><line x1="0" y1="520" x2="0" y2="590" stroke="#1E1E1E" stroke-width="4"/><rect x="-110" y="590" width="220" height="90" rx="24" fill="#FFFFFF" stroke="#1E1E1E" stroke-width="4"/><text y="647">sns / pay</text></g>
+    <g transform="translate(1420,0)"><line x1="0" y1="520" x2="0" y2="590" stroke="#1E1E1E" stroke-width="4"/><rect x="-110" y="590" width="220" height="90" rx="24" fill="#FDE2DF" stroke="#1E1E1E" stroke-width="4"/><text y="647" fill="#EA4335">mc</text></g>
+    <g transform="translate(1650,0)"><line x1="0" y1="520" x2="0" y2="590" stroke="#1E1E1E" stroke-width="4"/><rect x="-110" y="590" width="220" height="90" rx="24" fill="#FDE2DF" stroke="#1E1E1E" stroke-width="4"/><text y="647" fill="#EA4335">screen</text></g>
+  </g>
+  <rect x="270" y="770" width="1380" height="180" rx="32" fill="#FFFFFF" stroke="#1E1E1E" stroke-width="4"/>
+  <text x="320" y="840" font-size="32" font-weight="700" fill="#1E1E1E">各アプリ側は、共通ライブラリを1回呼ぶだけ</text>
+  <text x="320" y="900" font-size="30" fill="#1E1E1E" font-family="ui-monospace, Menlo, monospace">initializeRpAuth({ clientId: "screen", ... })</text>
+</svg>
