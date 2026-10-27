@@ -1,7 +1,8 @@
 'use strict';
 /* =========================================================================
  * engine-core.js — 描画プリミティブ・テキストレイアウト・パーティクル形状
- * 座標系は 1920x1080 の設計座標。シーン定義は scenes-*.js、実行は engine-run.js。
+ * 座標系は 1920x1080 の設計座標。読み込み順は engine-core.js → kit.js →
+ * デッキの scenes-*.js → engine-run.js（使い方は README.md）。
  * レイアウトの基準: 左右の余白 60、見出しは y 36、本文は y 150〜1040。
  * ========================================================================= */
 
@@ -18,6 +19,12 @@ const COL = {
 };
 const FS = THEME.fs || '"Inter","Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif';
 const FM = THEME.fm || '"JetBrains Mono","SF Mono",Menlo,Consolas,"Noto Sans JP",monospace';
+// engine.css の CSS 変数へ反映（背景・ノート・ヘルプの色をテーマに揃える）
+{
+  const st = document.documentElement.style;
+  for (const k of ['bg', 'ink', 'ink2', 'ink3', 'line']) st.setProperty('--' + k, COL[k]);
+  st.setProperty('--fm', FM);
+}
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -809,7 +816,8 @@ function sh(src) {
 }
 
 /* ---------- scene registry ---------- */
-const CHAPTERS = THEME.chapters || ['イントロ', '背景', '動機', '事例: LayerX', 'ハーネスの作り方', 'スキル紹介', '使った結果', 'まとめ'];
+const CHAPTERS = THEME.chapters || [];
 const SCENES = [];
 // scene({ ch, title, notes, cam?, P: particle parts | {parts, frame}, A: () => actors[] })
+// ch は THEME.chapters の添字（発表者ウィンドウに章名として出る）
 function scene(o) { SCENES.push(o); }

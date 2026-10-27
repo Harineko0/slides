@@ -3,35 +3,11 @@
  * scenes-1.js — イントロ / 背景 / 動機
  * 同じ id のアクターは次のシーンへモーフィングで引き継がれる。
  * ========================================================================= */
-const { ink, ink2, ink3, warm, cool, green, red, yellow, gray, violet, line, panel, panel2 } = COL;
-
-// 共通ヘルパー
-const tw = (text, size, weight = 500, font = 'sans') => layoutText({ ...DEF.text, size, weight, font }, text).w;
-const Hd = (text, o = {}) => T('h', text, { hud: true, x: 60, y: 36, size: 60, weight: 800, ...o });
-function card(id, o, label, to = {}) {
-  const size = to.size || 26, lh = to.lh || 1.4;
-  return [
-    B(id, { r: 14, fill: panel2, stroke: line, ...o }),
-    T(id + '_t', label, {
-      x: o.x + o.w / 2, y: o.y + (o.h - size * lh) / 2, align: 'center', size, lh, weight: 700,
-      d: o.d, md: o.md, s: o.s, rot: o.rot, alpha: o.alpha, jit: o.jit, ...to,
-    }),
-  ];
-}
+// 共通ヘルパー（tw / Hd / card / iconLine と色の短縮名は engine/kit.js）
 function head(id, x, y, w, h, o = {}) {
   return POLY(id, HEAD, { x, y, w, h, stroke: warm, lw: 3.5, fill: warm, fillA: 0.05, ...o });
 }
 const headP = (x, y, w, h, o = {}) => pPoly({ pts: HEAD, x, y, w, h, top: 0.75, ...o });
-// アイコン + 本文の 1 行（アイコンの大きさは文字サイズに比例）
-function iconLine(id, icon_, color, x, y, text, o = {}) {
-  const size = o.size || 48, r = size * 0.66, cy = y + size * 0.725;
-  return [
-    C(id + '_c', { x: x + r, y: cy, r, fill: color, fillA: 0.14, d: o.d, alpha: o.alpha }),
-    I(id + '_i', icon_, { x: x + r, y: cy, size: size * 0.72, color, lw: 2.6, d: o.d, alpha: o.alpha }),
-    T(id, text, { x: x + r * 2 + size * 0.5, y, size, weight: 700, maxW: 800, ...o }),
-  ];
-}
-
 // 右上の QR コードとラベル。タイトル（資料 URL）→ 自己紹介（X）で同じ id のまま差し替わる
 function qrTag(kick, label, src, d) {
   return [

@@ -7,28 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;700;800;900&family=Google+Sans+Code:wght@400;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../engine/engine.css">
 <style>
-  :root { color-scheme: light; }
-  html, body { margin: 0; height: 100%; background: #f0f0f0; overflow: hidden; }
-  canvas { display: block; width: 100vw; height: 100vh; cursor: none; }
-  body.pointer canvas { cursor: default; }
-  #notes {
-    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
-    width: min(1100px, calc(100vw - 32px)); box-sizing: border-box;
-    padding: 18px 22px; border-radius: 14px;
-    background: rgba(255, 255, 255, 0.96); border: 2px solid #1e1e1e;
-    color: #1e1e1e; font: 16px/1.7 "Noto Sans JP", "Hiragino Sans", sans-serif;
-    display: none;
-  }
-  #notes.on { display: block; }
-  #notes .meta { font: 12px "Google Sans Code", Menlo, monospace; color: #6b6b6b; margin-bottom: 6px; display: flex; justify-content: space-between; gap: 16px; }
-  #help {
-    position: fixed; right: 16px; top: 16px; padding: 12px 16px; border-radius: 10px;
-    background: rgba(255, 255, 255, 0.96); border: 2px solid #1e1e1e; color: #4a4a4a;
-    font: 12px/1.9 "Google Sans Code", Menlo, monospace; display: none;
-  }
-  #help.on { display: block; }
-  #help b { color: #1e1e1e; font-weight: 700; }
+  /* ノート・ヘルプは影のない黒い枠線（GDG のフラットな線画に合わせる） */
+  :root { --ui-bg: rgba(255, 255, 255, 0.96); --ui-border: 2px solid var(--ink); --ui-shadow: none; --ui-blur: none; --ui-muted: #6b6b6b; }
 </style>
 <script>
   // engine-core.js より前に読み込む。GDG のパレット（Off White 地・Black 02 の文字）に合わせる
@@ -45,23 +27,16 @@
     fs: '"Google Sans Flex","Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif',
     fm: '"Google Sans Code","JetBrains Mono",Menlo,Consolas,"Noto Sans JP",monospace',
     fonts: [['Google Sans Flex', [400, 500, 700, 800, 900]], ['Google Sans Code', [400, 700]]],
+    // kit.js の既定値の上書き（見出しを少し小さく、カードの文字を大きく）
+    kit: { heading: { y: 32, size: 56 }, cardSize: 30, iconTint: 0.16 },
     chapters: ['イントロ', '背景', '主張と全体像', '軸① 認証認可基盤', '軸② デザインシステム', '軸③ ハーネス', '土台と伏線回収', '実践の急所', 'まとめ', 'お知らせ'],
   };
 </script>
 </head>
 <body>
 <canvas id="stage" aria-label="内製化で全てを解決するためのプロダクトハーネス（モーショングラフィックス・プレゼンテーション）"></canvas>
-<div id="notes"><div class="meta"><span id="notes-title"></span><span id="notes-next"></span></div><div id="notes-body"></div></div>
-<div id="help">
-  <b>→ / Space / クリック</b> 次へ<br>
-  <b>← / Shift+クリック</b> 戻る<br>
-  <b>N</b> スピーカーノート<br>
-  <b>P</b> 発表者ウィンドウ<br>
-  <b>F</b> フルスクリーン<br>
-  <b>Home / End</b> 最初 / 最後<br>
-  <b>?</b> このヘルプ
-</div>
 <script src="../engine/engine-core.js"></script>
+<script src="../engine/kit.js"></script>
 <script src="scenes-intro.js"></script>
 <script src="scenes-map.js"></script>
 <script src="scenes-axes.js"></script>

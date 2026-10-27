@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新しいデッキ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../engine/engine.css">
+<script>
+  // engine-core.js より前に定義する。省略した項目はエンジンの既定値（engine/README.md）
+  window.ENGINE_THEME = {
+    chapters: ['イントロ', '本題', 'まとめ'],
+  };
+</script>
+</head>
+<body>
+<canvas id="stage" aria-label="新しいデッキ（モーショングラフィックス・プレゼンテーション）"></canvas>
+<script src="../engine/engine-core.js"></script>
+<script src="../engine/kit.js"></script>
+<script src="scenes.js"></script>
+<script src="../engine/engine-run.js"></script>
+</body>
+</html>

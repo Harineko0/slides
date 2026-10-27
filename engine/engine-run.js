@@ -6,7 +6,21 @@
 
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SPEED = REDUCED ? 0.45 : 1;
-const cv = document.getElementById('stage');
+
+/* ---------- DOM（index.html に無ければ作る） ---------- */
+const HELP_HTML = [
+  ['→ / Space / クリック', '次へ'], ['← / Shift+クリック', '戻る'], ['N', 'スピーカーノート'], ['P', '発表者ウィンドウ'],
+  ['F', 'フルスクリーン'], ['Home / End', '最初 / 最後'], ['?', 'このヘルプ'],
+].map(([k, v]) => `<b>${k}</b> ${v}`).join('<br>');
+function ensureEl(id, tag, html = '') {
+  let el = document.getElementById(id);
+  if (!el) { el = document.createElement(tag); el.id = id; el.innerHTML = html; document.body.appendChild(el); }
+  return el;
+}
+const cv = ensureEl('stage', 'canvas');
+if (!cv.hasAttribute('aria-label')) cv.setAttribute('aria-label', document.title);
+const notesEl = ensureEl('notes', 'div', '<div class="meta"><span id="notes-title"></span><span id="notes-next"></span></div><div id="notes-body"></div>');
+const helpEl = ensureEl('help', 'div', HELP_HTML);
 const ctx = cv.getContext('2d');
 let dpr = 1, vw = 0, vh = 0, sc = 1, ox = 0, oy = 0, vignette = null;
 
@@ -276,21 +290,20 @@ function drawGrid() {
 }
 
 /* ---------- notes / presenter ---------- */
-const notesEl = document.getElementById('notes');
 let pres = null, presT0 = performance.now();
 const PRES_HTML = `<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>発表者ビュー</title><style>
-body{margin:0;background:#f5f6f8;color:#141a24;font:18px/1.8 "Noto Sans JP","Hiragino Sans",sans-serif;display:grid;grid-template-rows:auto 1fr auto;height:100vh}
-header,footer{display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid #d6dce5;font:14px "JetBrains Mono",Menlo,monospace;color:#4a5466}
-footer{border-top:1px solid #d6dce5;border-bottom:0}
+body{margin:0;background:${COL.bg};color:${COL.ink};font:18px/1.8 "Noto Sans JP","Hiragino Sans",sans-serif;display:grid;grid-template-rows:auto 1fr auto;height:100vh}
+header,footer{display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid ${COL.line};font:14px ${FM};color:${COL.ink2}}
+footer{border-top:1px solid ${COL.line};border-bottom:0}
 main{padding:22px 28px;overflow:auto}
 h1{font-size:24px;margin:0 0 14px;line-height:1.5}
-#timer{font-size:28px;color:#1b7fd6}
-button{background:#fff;color:#141a24;border:1px solid #d6dce5;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
+#timer{font-size:28px;color:${COL.cool}}
+button{background:${COL.panel};color:${COL.ink};border:1px solid ${COL.line};border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
 #notes{font-size:22px;line-height:1.9;white-space:pre-wrap}
 </style></head><body><header><span id="idx"></span><span id="timer">0:00</span><button id="reset">タイマー リセット</button></header>
 <main><h1 id="cur"></h1><div id="notes"></div></main><footer><span>次へ →</span><span id="next"></span></footer></body></html>`;
 function openPresenter() {
-  pres = window.open('', 'dh-presenter', 'width=1000,height=720');
+  pres = window.open('', 'engine-presenter', 'width=1000,height=720');
   if (!pres) { notesEl.classList.add('on'); return; } // ポップアップがブロックされたらインラインのノートで代替
   pres.document.open(); pres.document.write(PRES_HTML); pres.document.close();
   pres.document.addEventListener('keydown', onKey);
@@ -305,7 +318,7 @@ function onStepChange() {
   document.getElementById('notes-body').textContent = S.notes || '';
   if (pres && !pres.closed) {
     const d = pres.document;
-    d.getElementById('idx').textContent = `${idx + 1} / ${SCENES.length}  ·  ${CHAPTERS[S.ch]}`;
+    d.getElementById('idx').textContent = [`${idx + 1} / ${SCENES.length}`, CHAPTERS[S.ch]].filter(Boolean).join('  ·  ');
     d.getElementById('cur').textContent = S.title;
     d.getElementById('notes').textContent = S.notes || '（ノートなし）';
     d.getElementById('next').textContent = N ? N.title : '（最後）';
@@ -329,7 +342,7 @@ function onKey(e) {
   else if (k === 'End') goTo(SCENES.length - 1);
   else if (k === 'n' || k === 'N') notesEl.classList.toggle('on');
   else if (k === 'p' || k === 'P') openPresenter();
-  else if (k === '?') document.getElementById('help').classList.toggle('on');
+  else if (k === '?') helpEl.classList.toggle('on');
   else if (k === 'f' || k === 'F') {
     if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
   }
@@ -380,12 +393,11 @@ function frame(ts) {
 
 /* ---------- boot: シーン中の全テキストでフォントを先読み ---------- */
 (async function boot() {
-  const text = [...new Set(SCENES.flatMap(s => s.A().flat(Infinity).map(a => (a && a.text) || '')).join('') + 'デザインハーネス?？0123456789')].join('');
+  const text = [...new Set(SCENES.flatMap(s => s.A().flat(Infinity).map(a => (a && a.text) || '')).join('') + 'AaBb?？0123456789{}')].join('');
+  // THEME.fonts は index.html の Google Fonts の指定と揃える（既定は Inter + JetBrains Mono）
+  const fonts = [['Noto Sans JP', [400, 500, 700, 900]], ...(THEME.fonts || [['Inter', [400, 500, 700, 800]], ['JetBrains Mono', [400, 700]]])];
   const loads = [];
-  for (const w of [400, 500, 700, 900]) loads.push(document.fonts.load(`${w} 40px "Noto Sans JP"`, text));
-  for (const w of [400, 500, 700, 800]) loads.push(document.fonts.load(`${w} 40px "Inter"`, 'AaBb0123'));
-  for (const w of [400, 700]) loads.push(document.fonts.load(`${w} 40px "JetBrains Mono"`, 'AaBb0123{}'));
-  for (const [fam, ws] of THEME.fonts || []) for (const w of ws) loads.push(document.fonts.load(`${w} 40px "${fam}"`, text));
+  for (const [fam, ws] of fonts) for (const w of ws) loads.push(document.fonts.load(`${w} 40px "${fam}"`, text));
   ctx.setTransform(dpr * sc, 0, 0, dpr * sc, dpr * ox, dpr * oy);
   ctx.fillStyle = COL.bg; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = COL.ink3; ctx.font = `500 18px ${FM}`; ctx.textAlign = 'center';

@@ -5,40 +5,12 @@
  * 例: 発端のツールの吹き出し（app0..7）→ 20以上のアプリのタイル、
  *     3つの壁（pl0..2）→ プロダクトハーネスの3本柱。
  * ========================================================================= */
-const { ink, ink2, ink3, warm, cool, green, red, yellow, gray, line, panel, panel2, blueInk, greenInk, redInk, yellowInk, pBlue, pGreen, pYellow, pRed } = COL;
+const { blueInk, greenInk, redInk, yellowInk, pBlue, pGreen, pYellow, pRed } = COL; // 基本色の短縮名は engine/kit.js
 const GDG4 = [cool, red, yellow, green];
 const IMGP = f => '../images/product-harness/' + f;
 const ASSET = f => 'img/' + f;
 
-/* ---------- 共通ヘルパー ---------- */
-const tw = (text, size, weight = 500, font = 'sans') => layoutText({ ...DEF.text, size, weight, font }, text).w;
-const Hd = (text, o = {}) => T('h', text, { hud: true, x: 60, y: 32, size: 56, weight: 800, ...o });
-function card(id, o, label, to = {}) {
-  const size = to.size || 30, lh = to.lh || 1.4;
-  const n = to.maxW ? layoutText({ ...DEF.text, size, lh, weight: to.weight || 700, font: to.font || 'sans', maxW: to.maxW }, label).lines.length : String(label).split('\n').length;
-  return [
-    B(id, { r: 14, fill: panel2, stroke: line, ...o }),
-    T(id + '_t', label, {
-      x: o.x + o.w / 2, y: o.y + (o.h - size * lh * n) / 2, align: 'center', size, lh, weight: 700,
-      d: o.d, md: o.md, s: o.s, rot: o.rot, alpha: o.alpha, jit: o.jit, ...to,
-    }),
-  ];
-}
-// 文字幅に合わせた丸いピル。align: 'center' なら x は中心
-function pill(id, x, y, text, o = {}, to = {}) {
-  const size = to.size || 30, weight = to.weight || 700;
-  const w = tw(text, size, weight, to.font) + size * 1.5, h = Math.round(size * 2.1);
-  return card(id, { x: o.align === 'center' ? x - w / 2 : o.align === 'right' ? x - w : x, y, w, h, r: h / 2, fill: panel, stroke: ink, lw: 2, ...o }, text, { size, weight, ...to });
-}
-// アイコン + 本文の 1 行（アイコンの大きさは文字サイズに比例）
-function iconLine(id, icon_, color, x, y, text, o = {}) {
-  const size = o.size || 48, r = size * 0.66, cy = y + size * 0.725;
-  return [
-    C(id + '_c', { x: x + r, y: cy, r, fill: color, fillA: 0.16, d: o.d, alpha: o.alpha }),
-    I(id + '_i', icon_, { x: x + r, y: cy, size: size * 0.72, color, lw: 2.6, d: o.d, alpha: o.alpha }),
-    T(id, text, { x: x + r * 2 + size * 0.5, y, size, weight: 700, maxW: 800, ...o }),
-  ];
-}
+/* ---------- 共通ヘルパー（tw / Hd / card / pill / iconLine は engine/kit.js） ---------- */
 const dot = (id, x, y, text, o = {}) => [
   C(id + '_d', { x: x + 11, y: y + (o.size || 40) * 0.725, r: 8, fill: o.dot || ink, d: o.d, alpha: o.alpha }),
   T(id, text, { x: x + 40, y, size: 40, weight: 600, maxW: o.maxW || 1760, ...o }),
