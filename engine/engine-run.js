@@ -385,6 +385,7 @@ function frame(ts) {
   for (const w of [400, 500, 700, 900]) loads.push(document.fonts.load(`${w} 40px "Noto Sans JP"`, text));
   for (const w of [400, 500, 700, 800]) loads.push(document.fonts.load(`${w} 40px "Inter"`, 'AaBb0123'));
   for (const w of [400, 700]) loads.push(document.fonts.load(`${w} 40px "JetBrains Mono"`, 'AaBb0123{}'));
+  for (const [fam, ws] of THEME.fonts || []) for (const w of ws) loads.push(document.fonts.load(`${w} 40px "${fam}"`, text));
   ctx.setTransform(dpr * sc, 0, 0, dpr * sc, dpr * ox, dpr * oy);
   ctx.fillStyle = COL.bg; ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = COL.ink3; ctx.font = `500 18px ${FM}`; ctx.textAlign = 'center';

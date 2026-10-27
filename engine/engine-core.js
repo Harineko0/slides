@@ -6,15 +6,18 @@
  * ========================================================================= */
 
 const W = 1920, H = 1080;
+// デッキごとの上書き（index.html で engine-core.js より前に window.ENGINE_THEME を定義する）
+const THEME = self.ENGINE_THEME || {};
 // ライトテーマ。アクセント色は白地でも読める濃さにしてある
 const COL = {
   bg: '#f5f6f8', ink: '#141a24', ink2: '#4a5466', ink3: '#8a93a3', line: '#d6dce5',
   panel: '#ffffff', panel2: '#eef1f5', code: '#f7f8fb', warmBg: '#fff3ec',
   warm: '#ec6a3e', cool: '#1b7fd6', green: '#12a05c', red: '#e03a52',
   yellow: '#c88400', gray: '#7d8697', violet: '#7556e6',
+  ...THEME.col,
 };
-const FS = '"Inter","Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif';
-const FM = '"JetBrains Mono","SF Mono",Menlo,Consolas,"Noto Sans JP",monospace';
+const FS = THEME.fs || '"Inter","Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif';
+const FM = THEME.fm || '"JetBrains Mono","SF Mono",Menlo,Consolas,"Noto Sans JP",monospace';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -475,10 +478,15 @@ const DRAW = {
       c.save();
       c.globalAlpha = alpha;
       rr(c, a.x, a.y, a.w, a.h, a.r);
-      c.fillStyle = COL.panel2; c.fill();
+      if (!a.bare) { c.fillStyle = COL.panel2; c.fill(); }
       c.clip();
-      if (e.ok) c.drawImage(e.el, a.x, a.y, a.w, a.h);
-      else {
+      if (e.ok && a.fit === 'cover') {
+        // 縦横比を保って枠を埋める。切り抜く位置は focus（0..1）で指定
+        const iw = e.el.naturalWidth || a.w, ih = e.el.naturalHeight || a.h, k = Math.max(a.w / iw, a.h / ih);
+        const sw = a.w / k, sh = a.h / k, [fx, fy] = a.focus || [0.5, 0.5];
+        c.drawImage(e.el, (iw - sw) * fx, (ih - sh) * fy, sw, sh, a.x, a.y, a.w, a.h);
+      } else if (e.ok) c.drawImage(e.el, a.x, a.y, a.w, a.h);
+      else if (!a.bare) {
         c.fillStyle = COL.ink3; c.font = `500 ${Math.max(14, a.w / 30)}px ${FS}`; c.textAlign = 'center'; c.textBaseline = 'middle';
         c.fillText(e.err ? '画像を読み込めません（オフライン時は出典 URL を参照）' : '読み込み中…', a.x + a.w / 2, a.y + a.h / 2);
       }
@@ -486,6 +494,7 @@ const DRAW = {
     };
     if (a._prevSrc && a._xf < 1) drawOne(a._prevSrc, a.alpha * (1 - a._xf));
     drawOne(a.src, a.alpha * (a._prevSrc && a._xf < 1 ? a._xf : 1));
+    if (a.bare) return;
     c.globalAlpha = a.alpha;
     rr(c, a.x, a.y, a.w, a.h, a.r);
     c.strokeStyle = COL.line; c.lineWidth = 2; c.stroke();
@@ -800,7 +809,7 @@ function sh(src) {
 }
 
 /* ---------- scene registry ---------- */
-const CHAPTERS = ['イントロ', '背景', '動機', '事例: LayerX', 'ハーネスの作り方', 'スキル紹介', '使った結果', 'まとめ'];
+const CHAPTERS = THEME.chapters || ['イントロ', '背景', '動機', '事例: LayerX', 'ハーネスの作り方', 'スキル紹介', '使った結果', 'まとめ'];
 const SCENES = [];
 // scene({ ch, title, notes, cam?, P: particle parts | {parts, frame}, A: () => actors[] })
 function scene(o) { SCENES.push(o); }
